@@ -4,12 +4,16 @@ import sys
 import time
 import asyncio
 
+import BlinkyCube
+
 try:
     from PIL import Image
 except ImportError:
     sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
 
 import cozmo
+
+DanceMambo = cozmo.anim.Triggers.DanceMambo
 
 def syncThisShit(listOfActions, lastTimeOut):
     for actionIndex in range(len(listOfActions)-1):
@@ -68,18 +72,26 @@ def singSwish(robot: cozmo.robot.Robot):
     swishImg = face_images[0]
     bishImg = face_images[1]
 
+    robot.say_text("wat uppppp").wait_for_completed()
+
 
     a1 = robot.say_text("swish swish", False, True, .5,in_parallel=True)
     a2 = robot.display_oled_face_image(swishImg, .5 * 1000.0, in_parallel=True)
 
     syncThisShit([a1,a2], 0 )
 
+    
+    robot.set_all_backpack_lights(cozmo.lights.red_light)
     a3 = robot.display_oled_face_image(bishImg, 1 * 1000.0, in_parallel=True)
     a4 = robot.say_text("bish", False, True, .5, in_parallel=True)
+    
+
 
     syncThisShit([a3,a4], 0)
-
+    robot.set_all_backpack_lights(cozmo.lights.off)
+    
+    robot.move_lift(0.70)
     robot.say_text("another one in the basket", False, True, .6).wait_for_completed(0)
-
+    robot.play_anim_trigger(DanceMambo).wait_for_completed()
 
 cozmo.run_program(singSwish)
