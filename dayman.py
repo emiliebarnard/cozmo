@@ -121,4 +121,5 @@ def singDayman(robot: cozmo.robot.Robot):
     
 ##    robot.play_anim_trigger(DanceMambo).wait_for_completed()
 
-cozmo.run_program(singDayman)
+for i in range(3):
+    cozmo.run_program(singDayman)
